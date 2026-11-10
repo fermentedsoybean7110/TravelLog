@@ -1,0 +1,3 @@
+<resources>
+    <string name="stub_active">スタブ使用中：サンプルデータを表示しています（Supabase 未接続）</string>
+</resources>
