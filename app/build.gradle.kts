@@ -1,7 +1,19 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
+
+val supabaseUrl = providers.gradleProperty("supabaseUrl").orElse("")
+val supabasePublishableKey = providers.gradleProperty("supabasePublishableKey").orElse("")
+val useStub = providers.gradleProperty("useStub").map {
+    it.toBooleanStrict()
+}.orElse(supabaseUrl.zip(supabasePublishableKey) { url, key ->
+    url.isBlank() || key.isBlank()
+})
+
+fun String.asBuildConfigString(): String =
+    "\"" + replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r") + "\""
 
 android {
     namespace = "com.example.travellog"
@@ -17,10 +29,16 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "SUPABASE_URL", supabaseUrl.get().asBuildConfigString())
+        buildConfigField("String", "SUPABASE_PUBLISHABLE_KEY", supabasePublishableKey.get().asBuildConfigString())
     }
 
     buildTypes {
+        debug {
+            buildConfigField("boolean", "USE_STUB", useStub.get().toString())
+        }
         release {
+            buildConfigField("boolean", "USE_STUB", "false")
             optimization {
                 enable = true
                 packageScope = setOf("androidx.**", "kotlin.**", "kotlinx.**")
@@ -33,6 +51,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -45,7 +64,15 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+    implementation(platform(libs.supabase.bom))
+    implementation(libs.supabase.auth)
+    implementation(libs.supabase.postgrest)
+    implementation(libs.ktor.client.android)
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)

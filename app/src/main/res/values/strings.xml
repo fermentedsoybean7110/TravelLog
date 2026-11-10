@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">TravelLog</string>
+    <string name="countries_title">Countries</string>
+    <string name="config_missing">Supabase configuration is missing. See README.md to configure the project URL and publishable key.</string>
+    <string name="login_hint">Sign in with an existing Supabase account to view countries.</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Sign in</string>
+    <string name="logout">Sign out</string>
+    <string name="login_error">Sign in failed. Check your account and network connection.</string>
+    <string name="request_error">The request failed. Check your connection and Supabase configuration, then try again.</string>
+    <string name="retry">Retry</string>
+    <string name="countries_empty">No countries found. Add country data to Supabase to see it here.</string>
+    <string name="stub_active">Stub mode: sample data, no Supabase connection</string>
 </resources>
