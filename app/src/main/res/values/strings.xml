@@ -12,4 +12,11 @@
     <string name="retry">Retry</string>
     <string name="countries_empty">No countries found. Add country data to Supabase to see it here.</string>
     <string name="stub_active">Stub mode: sample data, no Supabase connection</string>
+    <string name="back_to_countries">Back to countries</string>
+    <string name="back_to_cities">Back to cities</string>
+    <string name="city_detail_pending">Visit details and editing will be available in a later phase.</string>
+    <string name="cities_empty">No cities found for this country.</string>
+    <string name="cities_error">Could not load cities or visit status. Check your connection and Supabase setup.</string>
+    <string name="city_visited">Visited</string>
+    <string name="city_not_visited">Not visited</string>
 </resources>
