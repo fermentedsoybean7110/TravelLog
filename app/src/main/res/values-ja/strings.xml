@@ -1,3 +1,10 @@
 <resources>
     <string name="stub_active">スタブ使用中：サンプルデータを表示しています（Supabase 未接続）</string>
+    <string name="back_to_countries">国一覧に戻る</string>
+    <string name="back_to_cities">都市一覧に戻る</string>
+    <string name="city_detail_pending">訪問記録の詳細と編集は今後のフェーズで対応予定です。</string>
+    <string name="cities_empty">この国の都市は登録されていません。</string>
+    <string name="cities_error">都市または訪問状況を取得できませんでした。接続と Supabase の設定を確認してください。</string>
+    <string name="city_visited">訪問済み</string>
+    <string name="city_not_visited">未訪問</string>
 </resources>

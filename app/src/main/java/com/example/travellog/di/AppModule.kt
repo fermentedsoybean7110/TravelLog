@@ -4,12 +4,18 @@ import com.example.travellog.BuildConfig
 import com.example.travellog.data.auth.AuthRepositoryImpl
 import com.example.travellog.data.country.CountryDataSource
 import com.example.travellog.data.country.CountryRepositoryImpl
+import com.example.travellog.data.city.CityRepositoryImpl
 import com.example.travellog.data.stub.StubAuthRepository
+import com.example.travellog.data.stub.StubCityRepository
 import com.example.travellog.data.stub.StubCountryRepository
 import com.example.travellog.domain.repository.AuthRepository
+import com.example.travellog.domain.repository.CityRepository
 import com.example.travellog.domain.repository.CountryRepository
 import com.example.travellog.domain.usecase.GetCountriesUseCase
+import com.example.travellog.domain.usecase.GetCitiesUseCase
+import com.example.travellog.domain.usecase.GetVisitedCitiesUseCase
 import com.example.travellog.presentation.country.CountryViewModel
+import com.example.travellog.presentation.city.CityViewModel
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
@@ -30,6 +36,12 @@ val appModule = module {
     single<CountryRepository> {
         if (BuildConfig.DEBUG && BuildConfig.USE_STUB) StubCountryRepository() else CountryRepositoryImpl(get())
     }
+    single<CityRepository> {
+        if (BuildConfig.DEBUG && BuildConfig.USE_STUB) StubCityRepository() else CityRepositoryImpl(get())
+    }
     factory { GetCountriesUseCase(get()) }
+    factory { GetCitiesUseCase(get()) }
+    factory { GetVisitedCitiesUseCase(get()) }
     viewModel { CountryViewModel(get(), get()) }
+    viewModel { CityViewModel(get(), get()) }
 }
