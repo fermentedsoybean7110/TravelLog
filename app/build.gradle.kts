@@ -1,16 +1,22 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
 }
 
-val supabaseUrl = providers.gradleProperty("supabaseUrl").orElse("")
-val supabasePublishableKey = providers.gradleProperty("supabasePublishableKey").orElse("")
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.isFile) {
+        localPropertiesFile.inputStream().use { load(it) }
+    }
+}
+val supabaseUrl = localProperties.getProperty("supabaseUrl").orEmpty()
+val supabasePublishableKey = localProperties.getProperty("supabasePublishableKey").orEmpty()
 val useStub = providers.gradleProperty("useStub").map {
     it.toBooleanStrict()
-}.orElse(supabaseUrl.zip(supabasePublishableKey) { url, key ->
-    url.isBlank() || key.isBlank()
-})
+}.orElse(supabaseUrl.isBlank() || supabasePublishableKey.isBlank())
 
 fun String.asBuildConfigString(): String =
     "\"" + replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r") + "\""
@@ -29,8 +35,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "SUPABASE_URL", supabaseUrl.get().asBuildConfigString())
-        buildConfigField("String", "SUPABASE_PUBLISHABLE_KEY", supabasePublishableKey.get().asBuildConfigString())
+        buildConfigField("String", "SUPABASE_URL", supabaseUrl.asBuildConfigString())
+        buildConfigField("String", "SUPABASE_PUBLISHABLE_KEY", supabasePublishableKey.asBuildConfigString())
     }
 
     buildTypes {
