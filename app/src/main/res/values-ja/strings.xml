@@ -7,4 +7,18 @@
     <string name="cities_error">都市または訪問状況を取得できませんでした。接続と Supabase の設定を確認してください。</string>
     <string name="city_visited">訪問済み</string>
     <string name="city_not_visited">未訪問</string>
+    <string name="visit_add">訪問記録を追加</string>
+    <string name="visit_edit">訪問記録を編集</string>
+    <string name="visit_delete">削除</string>
+    <string name="visit_delete_confirm">この訪問記録を削除しますか？</string>
+    <string name="visit_title">タイトル</string>
+    <string name="visit_date">訪問日（YYYY-MM-DD）</string>
+    <string name="visit_memo">メモ</string>
+    <string name="visit_invalid">タイトルと正しい日付（YYYY-MM-DD）を入力してください。</string>
+    <string name="visit_operation_error">操作を完了できませんでした。接続を確認して再試行してください。</string>
+    <string name="visit_count">訪問件数: %1$d</string>
+    <string name="visit_history">訪問履歴</string>
+    <string name="visit_empty">訪問記録はありません。</string>
+    <string name="save">保存</string>
+    <string name="cancel">キャンセル</string>
 </resources>

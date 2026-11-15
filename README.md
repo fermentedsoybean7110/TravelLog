@@ -1,8 +1,8 @@
 # TravelLog
 
 Android application for recording visits to countries and cities. The first
-development milestone displays countries and cities from Supabase; the city
-detail screen is a placeholder until visit details and editing are implemented.
+development milestone displays countries, cities and visit records. Photos and
+the remaining account features are not implemented yet.
 
 ## Setup
 
@@ -12,9 +12,9 @@ detail screen is a placeholder until visit details and editing are implemented.
 2. Create a Supabase project. Run the migrations in `supabase/migrations/` in
    filename order, once each, in its SQL editor, and ensure the Data API exposes
    the `public` schema. If the countries migration was already applied, run
-   only `20261112000000_create_cities_and_visits.sql`. The migrations allow
-   authenticated users to read countries and cities, and only their own visits.
-   Visit creation and editing are not enabled for app users yet.
+   only migrations that have not yet been applied, including
+   `20261115000000_visit_write_policies.sql`. The migrations allow authenticated
+   users to read countries and cities and manage only their own visits.
 3. Add country records to `public.countries` through the SQL editor or a
    trusted administrative process. The full country and city master datasets
    are not included yet. For a small development-only example:
@@ -34,7 +34,8 @@ detail screen is a placeholder until visit details and editing are implemented.
 
    The app shows a city as visited only if a `visits` row belongs to the
    signed-in user and references that city. Without visit records, cities are
-   shown as not visited. There is no visit creation UI in this phase.
+   shown as not visited. Visits can be created, edited and deleted from city
+   details; visit history is available from the country screen.
 4. Create an email/password user in Supabase Auth and confirm the email according
    to your project's Auth settings. In-app registration is not implemented yet.
 5. Add these properties to the project root's `local.properties`, keeping any
@@ -59,6 +60,7 @@ Debug builds use stub data automatically when either Supabase setting is
 missing. A banner identifies stub mode; the three sample countries are local,
 and authentication is bypassed rather than simulated. No Supabase connection
 or account is needed. Sample cities include a visited Tokyo and unvisited Kyoto.
+Stub visits are stored only in memory and disappear when the app process ends.
 
 If Supabase settings are present but the service is unavailable, explicitly
 enable the stub for a debug build:

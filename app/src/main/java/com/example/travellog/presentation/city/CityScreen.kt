@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.travellog.R
 import com.example.travellog.domain.model.Country
+import com.example.travellog.presentation.visit.CityVisitsScreen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -36,17 +37,18 @@ fun CityScreen(country: Country, onBack: () -> Unit, viewModel: CityViewModel = 
     val selectedCity = (state as? CityUiState.Loaded)
         ?.takeIf { it.countryId == country.id }
         ?.cities?.firstOrNull { it.id == selectedCityId }
-    BackHandler { if (selectedCity != null) selectedCityId = null else onBack() }
+    BackHandler(enabled = selectedCity == null, onBack = onBack)
 
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         if (selectedCity != null) {
-            TextButton(onClick = { selectedCityId = null }) { Text(stringResource(R.string.back_to_cities)) }
-            Text(selectedCity.nameJa, style = MaterialTheme.typography.headlineMedium)
-            Text(country.nameJa)
-            Text(stringResource(R.string.city_detail_pending))
+            CityVisitsScreen(
+                city = selectedCity,
+                country = country,
+                onBack = { selectedCityId = null; viewModel.load(country.id) },
+            )
         } else {
             TextButton(onClick = onBack) { Text(stringResource(R.string.back_to_countries)) }
             Text(country.nameJa, style = MaterialTheme.typography.headlineMedium)
