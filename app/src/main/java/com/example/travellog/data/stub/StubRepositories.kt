@@ -5,6 +5,11 @@ import com.example.travellog.domain.model.City
 import com.example.travellog.domain.repository.AuthRepository
 import com.example.travellog.domain.repository.CityRepository
 import com.example.travellog.domain.repository.CountryRepository
+import com.example.travellog.domain.repository.VisitRepository
+import com.example.travellog.domain.model.Visit
+import com.example.travellog.domain.model.VisitHistoryItem
+import java.time.LocalDate
+import java.util.UUID
 
 class StubAuthRepository : AuthRepository {
     override suspend fun hasSession(): Boolean = true
@@ -24,7 +29,7 @@ class StubCountryRepository : CountryRepository {
     )
 }
 
-class StubCityRepository : CityRepository {
+class StubCityRepository(private val visits: StubVisitRepository = StubVisitRepository()) : CityRepository {
     private val cities = listOf(
         City(1, 1, "Paris", "パリ", 48.8566, 2.3522),
         City(2, 2, "Tokyo", "東京", 35.6762, 139.6503),
@@ -36,5 +41,37 @@ class StubCityRepository : CityRepository {
         cities.filter { it.countryId == countryId }.sortedBy(City::name)
 
     override suspend fun getVisitedCityIds(cityIds: List<Long>): Set<Long> =
-        cityIds.filter { it == 2L }.toSet()
+        cityIds.filter { visits.getVisitsByCity(it).isNotEmpty() }.toSet()
+}
+
+class StubVisitRepository : VisitRepository {
+    private val visits = mutableListOf(
+        Visit(UUID.fromString("00000000-0000-0000-0000-000000000001"), 2, LocalDate.of(2024, 4, 1), "Tokyo", null)
+    )
+    override suspend fun getVisitsByCity(cityId: Long) =
+        visits.filter { it.cityId == cityId }.sortedByDescending { it.visitedDate }
+
+    override suspend fun getHistory(): List<VisitHistoryItem> {
+        val places = mapOf(1L to ("Paris" to "France"), 2L to ("Tokyo" to "Japan"),
+            3L to ("Kyoto" to "Japan"), 4L to ("New York" to "United States"))
+        return visits.sortedByDescending { it.visitedDate }.map { visit ->
+            val place = requireNotNull(places[visit.cityId])
+            VisitHistoryItem(visit, place.first, place.second)
+        }
+    }
+
+    override suspend fun create(visit: Visit) {
+        check(visits.none { it.id == visit.id })
+        visits.add(visit)
+    }
+
+    override suspend fun update(visit: Visit) {
+        val index = visits.indexOfFirst { it.id == visit.id }
+        check(index >= 0)
+        visits[index] = visit
+    }
+
+    override suspend fun delete(id: UUID) {
+        check(visits.removeAll { it.id == id })
+    }
 }
