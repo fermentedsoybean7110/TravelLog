@@ -32,6 +32,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.travellog.BuildConfig
 import com.example.travellog.R
 import com.example.travellog.presentation.city.CityScreen
+import com.example.travellog.presentation.visit.VisitHistoryScreen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -53,6 +54,7 @@ private fun CountryRoute(viewModel: CountryViewModel = koinViewModel()) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var selectedCountryId by rememberSaveable { mutableStateOf<Long?>(null) }
+    var showHistory by rememberSaveable { mutableStateOf(false) }
     Scaffold { padding ->
         Column(
             modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp),
@@ -69,7 +71,9 @@ private fun CountryRoute(viewModel: CountryViewModel = koinViewModel()) {
             }
             val selectedCountry = (state as? CountryUiState.Countries)?.items
                 ?.firstOrNull { it.id == selectedCountryId }
-            if (selectedCountry != null) {
+            if (showHistory && state is CountryUiState.Countries) {
+                VisitHistoryScreen(onBack = { showHistory = false })
+            } else if (selectedCountry != null) {
                 CityScreen(country = selectedCountry, onBack = { selectedCountryId = null })
             } else {
                 Text(stringResource(R.string.countries_title), style = MaterialTheme.typography.headlineMedium)
@@ -106,6 +110,7 @@ private fun CountryRoute(viewModel: CountryViewModel = koinViewModel()) {
                         ) { Text(stringResource(R.string.login)) }
                     }
                     is CountryUiState.Countries -> {
+                        TextButton(onClick = { showHistory = true }) { Text(stringResource(R.string.visit_history)) }
                         if (!BuildConfig.USE_STUB) {
                             TextButton(onClick = viewModel::logout) { Text(stringResource(R.string.logout)) }
                         }

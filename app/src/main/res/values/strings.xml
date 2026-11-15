@@ -19,4 +19,18 @@
     <string name="cities_error">Could not load cities or visit status. Check your connection and Supabase setup.</string>
     <string name="city_visited">Visited</string>
     <string name="city_not_visited">Not visited</string>
+    <string name="visit_add">Add visit</string>
+    <string name="visit_edit">Edit visit</string>
+    <string name="visit_delete">Delete</string>
+    <string name="visit_delete_confirm">Delete this visit?</string>
+    <string name="visit_title">Title</string>
+    <string name="visit_date">Visit date (YYYY-MM-DD)</string>
+    <string name="visit_memo">Memo</string>
+    <string name="visit_invalid">Enter a title and a valid date (YYYY-MM-DD).</string>
+    <string name="visit_operation_error">Could not complete the request. Check the connection and try again.</string>
+    <string name="visit_count">Visits: %1$d</string>
+    <string name="visit_history">Visit history</string>
+    <string name="visit_empty">No visits yet.</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
 </resources>
